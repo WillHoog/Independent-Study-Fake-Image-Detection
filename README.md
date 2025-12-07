@@ -273,3 +273,9 @@ Load the trained student from `artifacts_ts1` and:
   - `student_resnet18_ts.pth` (via `MODEL_CKPT`)
 - The teacher artifacts (`teacher_features.npz`, `teacher_scaler_delta.pkl`, `teacher_pca.pkl`) are not loaded in this script, but are useful if someone wants to retrain or inspect the teacher space.
 - `train_log.json` is for inspecting training behavior but is not required for evaluation.
+
+**Test Images**
+
+- Folder of ~700 Unseen real and SDXL fakes along with a folder of a few random real/fakes to run the Eval script on
+- https://drive.google.com/drive/folders/1K9YVHiZeBEWPhPxgdinaX5Df9HLRYuPS?usp=sharing
+
