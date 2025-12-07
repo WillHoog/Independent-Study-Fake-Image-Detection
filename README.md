@@ -7,12 +7,12 @@ This repository contains the code used in my independent study project on detect
 
 The code is organized as:
 
-- `pipe2_generator.py` – generate SDXL copies of real images
-- `pipe2_QA.py` – optional quality filter to keep only good real/fake pairs
-- `teacherv1.py` – build pairwise handcrafted features and Δ-PCA “teacher” space
-- `studentTrainv1.py` – train a ResNet-18 “student” to imitate the teacher and predict real/fake
-- `studentEval2.py` – load the trained student model and evaluate it on new folders
-- `artifacts_ts1/` – saved teacher and student artifacts (features, PCA, scaler, weights, logs)
+- `pipe2_generator.py` - generate SDXL copies of real images
+- `pipe2_QA.py` - optional quality filter to keep only good real/fake pairs
+- `teacherv1.py` - build pairwise handcrafted features and Δ-PCA “teacher” space
+- `studentTrainv1.py` - train a ResNet-18 “student” to imitate the teacher and predict real/fake
+- `studentEval2.py` - load the trained student model and evaluate it on new folders
+- `artifacts_ts1/` - saved teacher and student artifacts (features, PCA, scaler, weights, logs)
 
 ---
 
@@ -39,13 +39,13 @@ Given a folder of real photos, generate SDXL “copies” that preserve composit
 
 **Key configuration (top of the file):**
 
-- `REF_DIR` – folder of real images
-- `OUT_DIR` – folder where generated images are saved
-- `PROMPT` / `NEG` – optional positive / negative prompts
-- `STEPS`, `STRENGTH`, `SPLIT`, `CFG_BASE`, `CFG_REF` – diffusion parameters
-- `MAX_WORK_SIDE`, `CENTER_CROP_SQ` – control working resolution
-- `JPEG_QUALITY`, `JPEG_SUBSAMPLING`, `JPEG_PROGRESSIVE` – output JPEG settings
-- `BASE_MODEL`, `REFINER` – SDXL base and refiner model names
+- `REF_DIR` - folder of real images
+- `OUT_DIR` - folder where generated images are saved
+- `PROMPT` / `NEG` - optional positive / negative prompts
+- `STEPS`, `STRENGTH`, `SPLIT`, `CFG_BASE`, `CFG_REF` - diffusion parameters
+- `MAX_WORK_SIDE`, `CENTER_CROP_SQ` - control working resolution
+- `JPEG_QUALITY`, `JPEG_SUBSAMPLING`, `JPEG_PROGRESSIVE` - output JPEG settings
+- `BASE_MODEL`, `REFINER` - SDXL base and refiner model names
 
 **Rough flow:**
 
@@ -71,12 +71,12 @@ Filter out obviously bad SDXL generations and keep only high-quality real/fake p
 
 **Key configuration:**
 
-- `REF_DIR` – original real images
-- `GEN_DIR` – generated `_gen` images from `pipe2_generator.py`
-- `FINAL_DIR` – output folder for “good” pairs
-- `THRESHOLD_SSIM` – minimum structural similarity (higher is better)
-- `THRESHOLD_LPIPS` – maximum perceptual distance (lower is better)
-- `MAX_WORK_SIDE`, `ROUND_TO_8`, `SAT_MATCH` – basic resizing and optional saturation matching
+- `REF_DIR` - original real images
+- `GEN_DIR` - generated `_gen` images from `pipe2_generator.py`
+- `FINAL_DIR` - output folder for “good” pairs
+- `THRESHOLD_SSIM` - minimum structural similarity (higher is better)
+- `THRESHOLD_LPIPS` - maximum perceptual distance (lower is better)
+- `MAX_WORK_SIDE`, `ROUND_TO_8`, `SAT_MATCH` - basic resizing and optional saturation matching
 
 **Rough flow:**
 
@@ -116,15 +116,15 @@ From folders of paired (real, gen) images, build:
 
 **Key configuration:**
 
-- `DATA_DIRS` – list of folders containing *paired* images
+- `DATA_DIRS` - list of folders containing *paired* images
   Each folder must have real images named e.g. `name.jpg` and generated counterparts named `name_gen.jpg` / `.jpeg` / `.png`.
-- `GEN_SUFFIX` – `_gen`, used to identify fakes from filenames
-- `TARGET_WIDTH`, `TARGET_HEIGHT` – strict center crop size (1280×840)
-- `JPEG_QUALITY`, `BLUR_SIGMA` – optional JPEG-normalization + micro-blur
+- `GEN_SUFFIX` - `_gen`, used to identify fakes from filenames
+- `TARGET_WIDTH`, `TARGET_HEIGHT` - strict center crop size (1280×840)
+- `JPEG_QUALITY`, `BLUR_SIGMA` - optional JPEG-normalization + micro-blur
 - Feature flags:
   - `USE_RADIAL_FFT`, `USE_LAPLACIAN_MS`, `USE_PATCH_CONTRAST`
-- `PCA_COMPONENTS` – dimensionality of the teacher latent space
-- `ARTIFACTS_DIR` – where outputs are saved 
+- `PCA_COMPONENTS` - dimensionality of the teacher latent space
+- `ARTIFACTS_DIR` - where outputs are saved 
 
 **Rough flow:**
 
@@ -144,13 +144,13 @@ From folders of paired (real, gen) images, build:
 **Outputs in `artifacts_ts1/`:**
 
 - `teacher_features.npz`:
-  - `fr_arr` – features for real images
-  - `fg_arr` – features for fake images
-  - `pair_ids` – string IDs per pair (for grouping)
-  - `real_paths` – full paths to real images
-  - `gen_paths` – full paths to fake images
-- `teacher_scaler_delta.pkl` – `StandardScaler` fitted on Δ
-- `teacher_pca.pkl` – `PCA` model fitted on Δ
+  - `fr_arr` - features for real images
+  - `fg_arr` - features for fake images
+  - `pair_ids` - string IDs per pair (for grouping)
+  - `real_paths` - full paths to real images
+  - `gen_paths` - full paths to fake images
+- `teacher_scaler_delta.pkl` - `StandardScaler` fitted on Δ
+- `teacher_pca.pkl` - `PCA` model fitted on Δ
 
 These are consumed by `studentTrainv1.py`.
 
@@ -173,18 +173,18 @@ The loss is a combination of:
 
 **Key configuration:**
 
-- `ARTIFACTS_DIR` – must match the teacher script (`artifacts_ts1`)
-- Preprocessing constants – must match teacher:
+- `ARTIFACTS_DIR` - must match the teacher script (`artifacts_ts1`)
+- Preprocessing constants - must match teacher:
   - `TARGET_WIDTH`, `TARGET_HEIGHT`
   - `JPEG_QUALITY`, `BLUR_SIGMA`
-- `PCA_COMPONENTS` – dimension of teacher z (must match teacher)
+- `PCA_COMPONENTS` - dimension of teacher z (must match teacher)
 - Training hyperparameters:
   - `BATCH_SIZE`
   - `NUM_EPOCHS`
   - `LEARNING_RATE`
-  - `BETA_REPR` – weight between representation loss and classification loss
-  - `TEST_FRACTION` – fraction of images held out for test
-  - `RANDOM_SEED` – reproducibility
+  - `BETA_REPR` - weight between representation loss and classification loss
+  - `TEST_FRACTION` - fraction of images held out for test
+  - `RANDOM_SEED` - reproducibility
 
 **Rough flow:**
 
@@ -210,13 +210,13 @@ The loss is a combination of:
    - Test AUC / AP / accuracy on held-out test set.
 6. Save artifacts to `artifacts_ts1/`:
 
-   - `student_resnet18_ts.pth` – student model weights (`state_dict`)
-   - `train_log.json` – JSON with per-epoch losses and metrics
+   - `student_resnet18_ts.pth` - student model weights (`state_dict`)
+   - `train_log.json` - JSON with per-epoch losses and metrics
 
 **Outputs in `artifacts_ts1/` (student-related):**
 
-- `student_resnet18_ts.pth` – *needed* for evaluation
-- `train_log.json` – optional, for plotting or checking training history
+- `student_resnet18_ts.pth` - *needed* for evaluation
+- `train_log.json` - optional, for plotting or checking training history
 
 ---
 
@@ -235,18 +235,18 @@ Load the trained student from `artifacts_ts1` and:
 
 **Key configuration:**
 
-- `MODEL_CKPT` – path to `student_resnet18_ts.pth` in `artifacts_ts1`
-- `BIG_EVAL_DIR` – folder with mixed real and `_gen` images (same naming pattern as training)
-- `SMALL_EVAL_DIR` – folder with a handful of example images
-- `GEN_SUFFIX` – `_gen` (used to assign labels: 1 = fake, 0 = real)
-- Preprocessing constants – must match training/teacher:
+- `MODEL_CKPT` - path to `student_resnet18_ts.pth` in `artifacts_ts1`
+- `BIG_EVAL_DIR` - folder with mixed real and `_gen` images (same naming pattern as training)
+- `SMALL_EVAL_DIR` - folder with a handful of example images
+- `GEN_SUFFIX` - `_gen` (used to assign labels: 1 = fake, 0 = real)
+- Preprocessing constants - must match training/teacher:
   - `TARGET_WIDTH`, `TARGET_HEIGHT`
   - `JPEG_QUALITY`, `BLUR_SIGMA`
 - Output file names:
-  - `BIG_PRED_CSV` – per-image predictions for the big eval set
-  - `BIG_METRICS_JSON` – AUC/AP/Acc summary
-  - `BIG_ROC_PNG` – ROC curve plot
-  - `SMALL_PRED_JSON` – predictions for the small example set
+  - `BIG_PRED_CSV` - per-image predictions for the big eval set
+  - `BIG_METRICS_JSON` - AUC/AP/Acc summary
+  - `BIG_ROC_PNG` - ROC curve plot
+  - `SMALL_PRED_JSON` - predictions for the small example set
 
 **Rough flow:**
 
