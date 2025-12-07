@@ -267,7 +267,7 @@ Load the trained student from `artifacts_ts1` and:
    - Print `prob_fake` per file to stdout.
    - Save them to `SMALL_PRED_JSON`.
 
-**What `artifacts_ts1/` is used for here:**
+**How `artifacts_ts1/` is used:**
 
 - `studentEval2.py` **only needs**:
   - `student_resnet18_ts.pth` (via `MODEL_CKPT`)
